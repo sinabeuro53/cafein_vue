@@ -1,0 +1,119 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.21.RELEASE'
+        lombokVersion = '1.18.4'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('io.spring.gradle:dependency-management-plugin:1.0.4.RELEASE')
+    }
+}
+
+def ver = [
+        mybatis_starter:			"1.3.1",
+        mysql_jdbc: 				"8.0.20",
+        HikariCP:					"3.4.3",
+        thymeleaf:					"3.0.9.RELEASE",
+        thymeleaf_spring:			"3.0.9.RELEASE",
+        thymeleaf_dialect:			"2.2.2",
+        thymeleaf_security:			"3.0.2.RELEASE",
+        log4jdbc:					"1.16",
+        commons_io:					"2.5",
+        commons_lang3:				"3.1",
+        jackson_mapper_asl:			"1.9.0",
+        imgscalr_lib:				"4.2",
+]
+
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'org.springframework.boot'
+
+    group = 'com.boneis'
+    version = '0.0.1-SNAPSHOT'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+
+    dependencies {
+        //compileOnly('org.projectlombok:lombok')
+        compileOnly("org.projectlombok:lombok:${lombokVersion}")
+        testCompile("org.springframework.boot:spring-boot-starter-test")
+    }
+
+    if (project.name.startsWith("cafein_vue")) {
+
+        dependencies {
+            //compile project('CafeIn-Back')
+
+            compile('org.springframework.boot:spring-boot-starter-cache')
+            compile('org.springframework.boot:spring-boot-starter-web')
+
+            compile(
+                [group: 'org.mybatis.spring.boot',			name: 'mybatis-spring-boot-starter', 		version: "${ver.mybatis_starter}"],
+                [group: 'mysql',							name: 'mysql-connector-java',				version: "${ver.mysql_jdbc}"],
+            )
+        }
+    }
+}
+
+
+/*project(':SCM-core') {
+    dependencies {
+        compile('org.springframework.boot:spring-boot-starter-security')
+        compile('org.springframework.boot:spring-boot-starter-web')
+
+        compile(
+                [group: 'org.mybatis.spring.boot',			name: 'mybatis-spring-boot-starter', 		version: "${ver.mybatis_starter}"],
+                [group: 'com.zaxxer',						name: 'HikariCP', 							version: "${ver.HikariCP}"],
+                [group: 'org.apache.poi',					name: 'poi', 								version: "${ver.poi}"],
+                [group: 'org.apache.poi',					name: 'poi-ooxml', 							version: "${ver.poi_ooxml}"],
+                [group: 'org.thymeleaf', 					name: 'thymeleaf', 							version: "${ver.thymeleaf}"],
+                [group: 'org.springframework.boot', 		name: 'spring-boot-starter-mail', 			version: "${ver.mail_starter}"],
+                [group: 'commons-io',						name: 'commons-io', 						version: "${ver.commons_io}"],
+                [group: 'org.apache.commons',				name: 'commons-lang3', 						version: "${ver.commons_lang3}"],
+                [group: 'org.imgscalr',						name: 'imgscalr-lib', 						version: "${ver.imgscalr_lib}"],
+                [group: 'org.jsoup', 						name: 'jsoup', 								version: "${ver.jsoup}"],
+                [group: 'net.minidev', 						name: 'json-smart', 						version: '2.3'],
+                [group: 'org.springframework.cloud', 		name: 'spring-cloud-starter-aws', 			version: '1.2.4.RELEASE'],
+                [group: 'org.springframework.cloud', 		name: 'spring-cloud-aws', 					version: '1.2.4.RELEASE']
+        )
+    }
+}*/
+/*
+
+project(':cafein_vue') {
+
+    jar{
+        manifest {
+            attributes  'Title': 'CafeInFront', 'Version': 1.0, 'Main-Class': 'com.portfolio.cafein_vue.CafeInFront'
+        }
+        //archiveName 'SCMBackOffice.jar'
+        baseName = 'CafeInFront'
+        dependsOn configurations.runtime
+
+        from {
+            configurations.compile.collect {it.isDirectory()? it: zipTree(it)}
+        }
+    }
+    dependencies {
+        compile(
+            [group: 'org.apache.poi',			name: 'poi', 			version: "${ver.poi}"],
+            [group: 'org.apache.poi',			name: 'poi-ooxml', 		version: "${ver.poi_ooxml}"],
+            [group: 'org.quartz-scheduler',			name: 'quartz', 		version: "2.3.1"]
+        )
+
+        compile("org.springframework.boot:spring-boot-devtools")
+    }
+}
+*/
